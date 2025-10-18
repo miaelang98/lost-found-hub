@@ -1,0 +1,47 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.tab-menu {
+  display: flex;
+  background-color: white;
+  border-bottom: 2px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-menu button {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  background: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.tab-menu button.active {
+  color: #4285f4;
+  border-bottom: 3px solid #4285f4;
+  font-weight: 700;
+}
+
+.tab-menu button:hover {
+  background-color: #f8f9fa;
+}
+
+.tab-content {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
