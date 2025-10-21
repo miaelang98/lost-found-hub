@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
-import LostItems from './pages/LostItems'
 import FoundItems from './pages/FoundItems'
-import MyItems from './pages/MyItems'
+import LostItems from './pages/LostItems'
 
 function App() {
-  const [activeTab, setActiveTab] = useState('lost')
+  const [activeTab, setActiveTab] = useState('found')
 
   return (
     <div className="App">
@@ -15,30 +14,23 @@ function App() {
       {/* 탭 메뉴 */}
       <div className="tab-menu">
         <button 
-          className={activeTab === 'lost' ? 'active' : ''}
-          onClick={() => setActiveTab('lost')}
-        >
-          분실물 찾기
-        </button>
-        <button 
           className={activeTab === 'found' ? 'active' : ''}
           onClick={() => setActiveTab('found')}
         >
-          습득물 등록
+          찾았어요 💡
         </button>
         <button 
-          className={activeTab === 'my' ? 'active' : ''}
-          onClick={() => setActiveTab('my')}
+          className={activeTab === 'lost' ? 'active' : ''}
+          onClick={() => setActiveTab('lost')}
         >
-          내 등록물
+          잃어버렸어요 😢
         </button>
       </div>
 
       {/* 탭별 내용 */}
       <div className="tab-content">
-        {activeTab === 'lost' && <LostItems />}
         {activeTab === 'found' && <FoundItems />}
-        {activeTab === 'my' && <MyItems />}
+        {activeTab === 'lost' && <LostItems />}
       </div>
     </div>
   )

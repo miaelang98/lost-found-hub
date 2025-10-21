@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import ItemForm from '../components/ItemForm'
 import ItemCard from '../components/ItemCard'
+import SearchBar from '../components/SearchBar'
 import './Pages.css'
 
 function FoundItems() {
   const [items, setItems] = useState([])
-  const [showForm, setShowForm] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showForm, setShowForm] = useState(true) // 기본으로 폼 보이기
 
   useEffect(() => {
     fetchItems()
@@ -28,32 +30,43 @@ function FoundItems() {
   }
 
   const handleSuccess = () => {
-    setShowForm(false)
     fetchItems()
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
   }
+
+  const filteredItems = items.filter(item =>
+    item.item_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="page">
-      <h2 className="page-title">습득물 등록</h2>
+      <h2 className="page-title">찾았어요 💡</h2>
+      <p className="page-description">습득한 물건을 등록해주세요</p>
       
-      <button 
-        className="add-button"
-        onClick={() => setShowForm(!showForm)}
-      >
-        {showForm ? '취소' : '+ 습득물 등록하기'}
-      </button>
-
-      {showForm && (
+      {/* 등록 폼 */}
+      <div className="form-section">
         <ItemForm type="found" onSuccess={handleSuccess} />
-      )}
+      </div>
 
+      {/* 구분선 */}
+      <div className="divider">
+        <span>등록된 습득물</span>
+      </div>
+
+      {/* 검색 바 */}
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
+      {/* 목록 */}
       <div className="items-section">
-        <h3>최근 등록된 습득물</h3>
-        {items.length === 0 ? (
-          <p className="no-items">등록된 습득물이 없습니다.</p>
+        {filteredItems.length === 0 ? (
+          <p className="no-items">
+            {searchTerm ? '검색 결과가 없습니다.' : '등록된 습득물이 없습니다.'}
+          </p>
         ) : (
           <div className="items-grid">
-            {items.map(item => (
+            {filteredItems.map(item => (
               <ItemCard key={item.id} item={item} />
             ))}
           </div>
