@@ -14,6 +14,9 @@ function ItemForm({ type, onSuccess }) {
   const [imageFile, setImageFile] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  // 오늘 날짜를 YYYY-MM-DD 형식으로
+  const today = new Date().toISOString().split('T')[0]
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -66,13 +69,14 @@ function ItemForm({ type, onSuccess }) {
             date: formData.date,
             description: formData.description,
             contact: formData.contact,
-            image_url: imageUrl
+            image_url: imageUrl,
+            approved: false  // 승인 대기 상태
           }
         ])
 
       if (error) throw error
 
-      alert('등록이 완료되었습니다!')
+      alert('등록이 완료되었습니다! 관리자 승인 후 게시됩니다.')
       
       // 폼 초기화
       setFormData({
@@ -95,7 +99,6 @@ function ItemForm({ type, onSuccess }) {
 
   return (
     <form className="item-form" onSubmit={handleSubmit}>
-          
       <div className="form-group">
         <label>물품명 *</label>
         <input
@@ -127,6 +130,7 @@ function ItemForm({ type, onSuccess }) {
           name="date"
           value={formData.date}
           onChange={handleChange}
+          max={today}  // 오늘 이후 날짜 선택 불가
           required
         />
       </div>
@@ -143,13 +147,13 @@ function ItemForm({ type, onSuccess }) {
       </div>
 
       <div className="form-group">
-        <label>연락처 *</label>
+        <label>장소 *</label>
         <input
           type="text"
           name="contact"
           value={formData.contact}
           onChange={handleChange}
-          placeholder="예: 010-1234-5678 또는 3학년 2반"
+          placeholder="예: 2층 2학년부"
           required
         />
       </div>

@@ -93,10 +93,10 @@
   .admin-item img {
     width: 200px;
     height: 150px;
-    object-fit: contain;
-    background: #f9fafb;
+    object-fit: contain;  /* cover → contain */
+    background: white;     /* #f9fafb → white */
     border-radius: 8px;
-    padding: 8px;
+    border: 1px solid #e5e7eb;
   }
   
   .admin-item-info h3 {

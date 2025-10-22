@@ -20,8 +20,9 @@ function FoundItems() {
         .from('items')
         .select('*')
         .eq('type', 'found')
+        .eq('approved', true)  // 승인된 것만
         .order('created_at', { ascending: false })
-
+  
       if (error) throw error
       setItems(data || [])
     } catch (error) {

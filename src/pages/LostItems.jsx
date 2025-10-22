@@ -19,7 +19,7 @@ function LostItems() {
       const { data, error } = await supabase
         .from('items')
         .select('*')
-        .eq('type', 'found')
+        .eq('type', 'lost')
         .eq('approved', true)  // 승인된 것만
         .order('created_at', { ascending: false })
   
