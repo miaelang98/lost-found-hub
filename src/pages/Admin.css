@@ -1,0 +1,156 @@
+/* 로그인 화면 */
+.admin-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+  }
+  
+  .login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .login-box h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #333;
+  }
+  
+  .login-box input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  
+  .login-box button {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  /* 관리자 페이지 */
+  .admin-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .admin-header h2 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .admin-header button {
+    padding: 8px 16px;
+    background: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  /* 아이템 목록 */
+  .admin-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .admin-item {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .admin-item img {
+    width: 200px;
+    height: 150px;
+    object-fit: contain;
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 8px;
+  }
+  
+  .admin-item-info h3 {
+    margin: 0 0 12px 0;
+    color: #111;
+  }
+  
+  .admin-item-info p {
+    margin: 6px 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .approve-btn,
+  .reject-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  
+  .approve-btn {
+    background: #10b981;
+    color: white;
+  }
+  
+  .approve-btn:hover {
+    background: #059669;
+  }
+  
+  .reject-btn {
+    background: #ef4444;
+    color: white;
+  }
+  
+  .reject-btn:hover {
+    background: #dc2626;
+  }
+  
+  @media (max-width: 768px) {
+    .admin-item {
+      grid-template-columns: 1fr;
+    }
+    
+    .admin-item img {
+      width: 100%;
+    }
+  }

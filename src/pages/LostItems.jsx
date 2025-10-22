@@ -8,7 +8,7 @@ import './Pages.css'
 function LostItems() {
   const [items, setItems] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [showForm, setShowForm] = useState(true) // 기본으로 폼 보이기
+  const [showForm, setShowForm] = useState(false) // 기본으로 폼 숨기기
 
   useEffect(() => {
     fetchItems()
@@ -19,9 +19,10 @@ function LostItems() {
       const { data, error } = await supabase
         .from('items')
         .select('*')
-        .eq('type', 'lost')
+        .eq('type', 'found')
+        .eq('approved', true)  // 승인된 것만
         .order('created_at', { ascending: false })
-
+  
       if (error) throw error
       setItems(data || [])
     } catch (error) {
@@ -30,8 +31,8 @@ function LostItems() {
   }
 
   const handleSuccess = () => {
+    setShowForm(false)
     fetchItems()
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
   }
 
   const filteredItems = items.filter(item =>
@@ -42,36 +43,47 @@ function LostItems() {
 
   return (
     <div className="page">
-      <h2 className="page-title">잃어버렸어요 😢</h2>
-      <p className="page-description">분실한 물건을 등록해주세요</p>
+      {/* 상단 헤더 */}
+      <div className="page-header">
+        <div>
+          <h2 className="page-title">잃어버렸어요 😢</h2>
+          <p className="page-subtitle">분실한 물건을 등록해주세요</p>
+        </div>
+        <button 
+          className="toggle-form-btn"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? '✕ 닫기' : '+ 등록하기'}
+        </button>
+      </div>
       
-      {/* 등록 폼 */}
-      <div className="form-section">
-        <ItemForm type="lost" onSuccess={handleSuccess} />
-      </div>
-
-      {/* 구분선 */}
-      <div className="divider">
-        <span>등록된 분실물</span>
-      </div>
+      {/* 등록 폼 (토글) */}
+      {showForm && (
+        <div className="form-section">
+          <ItemForm type="lost" onSuccess={handleSuccess} />
+        </div>
+      )}
 
       {/* 검색 바 */}
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      {!showForm && <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />}
 
       {/* 목록 */}
-      <div className="items-section">
-        {filteredItems.length === 0 ? (
-          <p className="no-items">
-            {searchTerm ? '검색 결과가 없습니다.' : '등록된 분실물이 없습니다.'}
-          </p>
-        ) : (
-          <div className="items-grid">
-            {filteredItems.map(item => (
-              <ItemCard key={item.id} item={item} />
-            ))}
-          </div>
-        )}
-      </div>
+      {!showForm && (
+        <div className="items-section">
+          <div className="items-count">{filteredItems.length}개의 분실물</div>
+          {filteredItems.length === 0 ? (
+            <p className="no-items">
+              {searchTerm ? '검색 결과가 없습니다.' : '등록된 분실물이 없습니다.'}
+            </p>
+          ) : (
+            <div className="items-grid">
+              {filteredItems.map(item => (
+                <ItemCard key={item.id} item={item} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import './App.css'
 import Header from './components/Header'
 import FoundItems from './pages/FoundItems'
 import LostItems from './pages/LostItems'
+import Admin from './pages/Admin'
 
 function App() {
   const [activeTab, setActiveTab] = useState('found')
@@ -25,12 +26,19 @@ function App() {
         >
           잃어버렸어요 😢
         </button>
+        <button 
+          className={activeTab === 'admin' ? 'active' : ''}
+          onClick={() => setActiveTab('admin')}
+        >
+          🔒 관리
+        </button>
       </div>
 
       {/* 탭별 내용 */}
       <div className="tab-content">
         {activeTab === 'found' && <FoundItems />}
         {activeTab === 'lost' && <LostItems />}
+        {activeTab === 'admin' && <Admin />}
       </div>
     </div>
   )

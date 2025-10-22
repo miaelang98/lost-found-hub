@@ -95,8 +95,7 @@ function ItemForm({ type, onSuccess }) {
 
   return (
     <form className="item-form" onSubmit={handleSubmit}>
-      <h2>{type === 'lost' ? '분실물 등록' : '습득물 등록'}</h2>
-      
+          
       <div className="form-group">
         <label>물품명 *</label>
         <input
