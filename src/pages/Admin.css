@@ -45,7 +45,7 @@
   
   /* 관리자 페이지 */
   .admin-page {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -54,7 +54,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
   }
   
   .admin-header h2 {
@@ -62,7 +62,7 @@
     color: #333;
   }
   
-  .admin-header button {
+  .logout-btn {
     padding: 8px 16px;
     background: #6b7280;
     color: white;
@@ -70,6 +70,32 @@
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+  }
+  
+  /* 탭 */
+  .admin-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  .admin-tabs button {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .admin-tabs button.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: 600;
   }
   
   /* 아이템 목록 */
@@ -87,16 +113,25 @@
     display: grid;
     grid-template-columns: 200px 1fr auto;
     gap: 20px;
-    align-items: center;
+    align-items: start;
   }
   
-  .admin-item img {
+  .admin-image-container {
     width: 200px;
     height: 150px;
-    object-fit: contain;  /* cover → contain */
-    background: white;     /* #f9fafb → white */
-    border-radius: 8px;
+    background: white;
     border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+  
+  .admin-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
   
   .admin-item-info h3 {
@@ -114,10 +149,11 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    min-width: 100px;
   }
   
   .approve-btn,
-  .reject-btn {
+  .delete-btn {
     padding: 10px 20px;
     border: none;
     border-radius: 6px;
@@ -125,6 +161,7 @@
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
+    font-size: 14px;
   }
   
   .approve-btn {
@@ -136,13 +173,21 @@
     background: #059669;
   }
   
-  .reject-btn {
+  .delete-btn {
     background: #ef4444;
     color: white;
   }
   
-  .reject-btn:hover {
+  .delete-btn:hover {
     background: #dc2626;
+  }
+  
+  .loading,
+  .no-items {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 15px;
   }
   
   @media (max-width: 768px) {
@@ -150,7 +195,11 @@
       grid-template-columns: 1fr;
     }
     
-    .admin-item img {
+    .admin-image-container {
       width: 100%;
+    }
+    
+    .admin-actions {
+      flex-direction: row;
     }
   }

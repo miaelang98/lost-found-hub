@@ -1,59 +1,112 @@
 .page {
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* 페이지 헤더 */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 16px;
   }
   
   .page-title {
     font-size: 28px;
-    margin-bottom: 24px;
+    margin: 0 0 8px 0;
     color: #333;
-    text-align: center;
   }
   
-  .add-button {
-    display: block;
-    margin: 0 auto 30px;
-    padding: 14px 32px;
+  .page-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  /* 등록 버튼 - 세련되게 */
+  .toggle-form-btn {
+    padding: 12px 24px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: 24px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.3s;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   
-  .add-button:hover {
+  .toggle-form-btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
   }
   
+  .toggle-form-btn:active {
+    transform: translateY(0);
+  }
+  
+  /* 폼 섹션 */
+  .form-section {
+    margin-bottom: 30px;
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 아이템 카운트 */
+  .items-count {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  
+  /* 아이템 섹션 */
   .items-section {
-    margin-top: 40px;
+    margin-top: 20px;
   }
   
-  .items-section h3 {
-    font-size: 20px;
-    margin-bottom: 20px;
-    color: #444;
-  }
-  
+  /* 아이템 그리드 */
   .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
   
-  .loading,
+  @media (min-width: 768px) {
+    .items-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* 빈 상태 */
   .no-items {
     text-align: center;
-    padding: 40px;
-    color: #666;
-    font-size: 16px;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 15px;
   }
   
-  @media (max-width: 768px) {
-    .items-grid {
-      grid-template-columns: 1fr;
-    }
+  /* 로딩 */
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 15px;
   }

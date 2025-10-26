@@ -14,7 +14,6 @@ function ItemForm({ type, onSuccess }) {
   const [imageFile, setImageFile] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  // 오늘 날짜를 YYYY-MM-DD 형식으로
   const today = new Date().toISOString().split('T')[0]
 
   const handleChange = (e) => {
@@ -37,7 +36,6 @@ function ItemForm({ type, onSuccess }) {
     try {
       let imageUrl = null
 
-      // 이미지가 있으면 압축 후 업로드
       if (imageFile) {
         const compressedImage = await compressImage(imageFile)
         const fileExt = imageFile.name.split('.').pop()
@@ -50,7 +48,6 @@ function ItemForm({ type, onSuccess }) {
 
         if (uploadError) throw uploadError
 
-        // 이미지 URL 가져오기
         const { data } = supabase.storage
           .from('items')
           .getPublicUrl(filePath)
@@ -58,7 +55,6 @@ function ItemForm({ type, onSuccess }) {
         imageUrl = data.publicUrl
       }
 
-      // 데이터베이스에 저장
       const { error } = await supabase
         .from('items')
         .insert([
@@ -70,7 +66,7 @@ function ItemForm({ type, onSuccess }) {
             description: formData.description,
             contact: formData.contact,
             image_url: imageUrl,
-            approved: false  // 승인 대기 상태
+            approved: false
           }
         ])
 
@@ -78,7 +74,6 @@ function ItemForm({ type, onSuccess }) {
 
       alert('등록이 완료되었습니다! 관리자 승인 후 게시됩니다.')
       
-      // 폼 초기화
       setFormData({
         itemName: '',
         location: '',
@@ -97,6 +92,26 @@ function ItemForm({ type, onSuccess }) {
     }
   }
 
+  // type에 따른 문구 설정
+  const labels = {
+    found: {
+      location: '습득 장소',
+      locationPlaceholder: '예: 3층 복도',
+      date: '습득 날짜',
+      contact: '보관 장소 또는 연락처',
+      contactPlaceholder: '예: 행정실 또는 010-1234-5678'
+    },
+    lost: {
+      location: '분실 장소',
+      locationPlaceholder: '예: 운동장',
+      date: '분실 날짜',
+      contact: '찾아갈 장소 또는 연락처',
+      contactPlaceholder: '예: 3학년 2반 또는 010-1234-5678'
+    }
+  }
+
+  const label = labels[type]
+
   return (
     <form className="item-form" onSubmit={handleSubmit}>
       <div className="form-group">
@@ -112,28 +127,28 @@ function ItemForm({ type, onSuccess }) {
       </div>
 
       <div className="form-group">
-        <label>습득한 장소 *</label>
+        <label>{label.location} *</label>
         <input
           type="text"
           name="location"
           value={formData.location}
           onChange={handleChange}
-          placeholder="예: 3층 복도"
+          placeholder={label.locationPlaceholder}
           required
         />
       </div>
 
       <div className="form-group">
-  <label>날짜 *</label>
-  <input
-    type="date"
-    name="date"
-    value={formData.date}
-    onChange={handleChange}
-    max={new Date().toISOString().split('T')[0]}
-    required
-  />
-</div>
+        <label>{label.date} *</label>
+        <input
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          max={today}
+          required
+        />
+      </div>
 
       <div className="form-group">
         <label>설명</label>
@@ -147,13 +162,13 @@ function ItemForm({ type, onSuccess }) {
       </div>
 
       <div className="form-group">
-        <label>보관장소 *</label>
+        <label>{label.contact} *</label>
         <input
           type="text"
           name="contact"
           value={formData.contact}
           onChange={handleChange}
-          placeholder="2학년부 교무실"
+          placeholder={label.contactPlaceholder}
           required
         />
       </div>
