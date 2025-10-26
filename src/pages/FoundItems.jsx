@@ -16,12 +16,17 @@ function FoundItems() {
 
   const fetchItems = async () => {
     try {
+      console.log('습득물 불러오기 시작...')
+      
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('type', 'found')
-        .eq('approved', true)  // 승인된 것만
+        .eq('approved', true)
         .order('created_at', { ascending: false })
+  
+      console.log('불러온 데이터:', data)
+      console.log('에러:', error)
   
       if (error) throw error
       setItems(data || [])

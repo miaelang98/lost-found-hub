@@ -112,7 +112,7 @@ function ItemForm({ type, onSuccess }) {
       </div>
 
       <div className="form-group">
-        <label>장소 *</label>
+        <label>습득한 장소 *</label>
         <input
           type="text"
           name="location"
@@ -124,16 +124,16 @@ function ItemForm({ type, onSuccess }) {
       </div>
 
       <div className="form-group">
-        <label>날짜 *</label>
-        <input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          max={today}  // 오늘 이후 날짜 선택 불가
-          required
-        />
-      </div>
+  <label>날짜 *</label>
+  <input
+    type="date"
+    name="date"
+    value={formData.date}
+    onChange={handleChange}
+    max={new Date().toISOString().split('T')[0]}
+    required
+  />
+</div>
 
       <div className="form-group">
         <label>설명</label>
@@ -147,13 +147,13 @@ function ItemForm({ type, onSuccess }) {
       </div>
 
       <div className="form-group">
-        <label>장소 *</label>
+        <label>보관장소 *</label>
         <input
           type="text"
           name="contact"
           value={formData.contact}
           onChange={handleChange}
-          placeholder="예: 2층 2학년부"
+          placeholder="2학년부 교무실"
           required
         />
       </div>

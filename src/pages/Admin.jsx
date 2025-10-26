@@ -23,12 +23,17 @@ function Admin() {
   const fetchPendingItems = async () => {
     setLoading(true)
     try {
+      console.log('승인 대기 항목 불러오기...')
+      
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('approved', false)
         .order('created_at', { ascending: false })
-
+  
+      console.log('승인 대기 항목:', data)
+      console.log('에러:', error)
+  
       if (error) throw error
       setItems(data || [])
     } catch (error) {
