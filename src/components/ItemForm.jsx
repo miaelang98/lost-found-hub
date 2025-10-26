@@ -96,17 +96,17 @@ function ItemForm({ type, onSuccess }) {
   const labels = {
     found: {
       location: '습득 장소',
-      locationPlaceholder: '예: 3층 복도',
+      locationPlaceholder: '예: 2층 컴퓨터실 앞',
       date: '습득 날짜',
-      contact: '보관 장소 또는 연락처',
-      contactPlaceholder: '예: 행정실 또는 010-1234-5678'
+      contact: '보관 장소(교무실)',
+      contactPlaceholder: '예: 2학년부 교무실'
     },
     lost: {
       location: '분실 장소',
       locationPlaceholder: '예: 운동장',
       date: '분실 날짜',
-      contact: '찾아갈 장소 또는 연락처',
-      contactPlaceholder: '예: 3학년 2반 또는 010-1234-5678'
+      contact: '찾아갈 장소(교무실)',
+      contactPlaceholder: '예: 2학년부 교무실'
     }
   }
 
