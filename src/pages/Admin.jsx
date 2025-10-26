@@ -5,51 +5,37 @@ import './Admin.css'
 function Admin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [password, setPassword] = useState('')
-  const [loginAttempts, setLoginAttempts] = useState(0)
-  const [isBlocked, setIsBlocked] = useState(false)
   const [pendingItems, setPendingItems] = useState([])
   const [approvedItems, setApprovedItems] = useState([])
-  const [activeView, setActiveView] = useState('pending') // 'pending' or 'approved'
+  const [activeView, setActiveView] = useState('pending')
   const [loading, setLoading] = useState(false)
 
-  const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'admin123' // 기본값 설정
-  const MAX_ATTEMPTS = 3
-  
+  const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'admin1234'
+
   const handleLogin = (e) => {
     e.preventDefault()
-    if (isBlocked) {
-        alert('너무 많은 시도로 인해 차단되었습니다. 10분 후 다시 시도하세요.')
-        return
-      }
-      if (password === ADMIN_PASSWORD) {
-        setIsLoggedIn(true)
-        setLoginAttempts(0)
-      } else {
-        const newAttempts = loginAttempts + 1
-        setLoginAttempts(newAttempts)
-        
-        if (newAttempts >= MAX_ATTEMPTS) {
-          setIsBlocked(true)
-          setTimeout(() => {
-            setIsBlocked(false)
-            setLoginAttempts(0)
-          }, 10 * 60 * 1000) // 10분
-          alert('3회 실패로 10분간 차단되었습니다.')
-        } else {
-          alert(`비밀번호가 틀렸습니다. (${newAttempts}/${MAX_ATTEMPTS})`)
-        }
-      }
+    if (password === ADMIN_PASSWORD) {
+      setIsLoggedIn(true)
+      fetchAllItems()
+    } else {
+      alert('비밀번호가 틀렸습니다.')
+    }
   }
 
   const fetchAllItems = async () => {
     setLoading(true)
     try {
+      console.log('🔍 데이터 불러오기 시작...')
+      
       // 승인 대기 항목
       const { data: pending, error: pendingError } = await supabase
         .from('items')
         .select('*')
         .eq('approved', false)
         .order('created_at', { ascending: false })
+
+      console.log('📋 승인 대기:', pending)
+      console.log('❌ 에러:', pendingError)
 
       if (pendingError) throw pendingError
       setPendingItems(pending || [])
@@ -61,11 +47,14 @@ function Admin() {
         .eq('approved', true)
         .order('created_at', { ascending: false })
 
+      console.log('📋 승인 완료:', approved)
+
       if (approvedError) throw approvedError
       setApprovedItems(approved || [])
 
     } catch (error) {
-      console.error('데이터 로드 오류:', error)
+      console.error('💥 데이터 로드 오류:', error)
+      alert('데이터를 불러오는데 실패했습니다: ' + error.message)
     } finally {
       setLoading(false)
     }
@@ -73,16 +62,22 @@ function Admin() {
 
   const handleApprove = async (id) => {
     try {
+      console.log('✅ 승인 시작:', id)
+      
       const { error } = await supabase
         .from('items')
         .update({ approved: true })
         .eq('id', id)
 
-      if (error) throw error
+      if (error) {
+        console.error('승인 에러:', error)
+        throw error
+      }
       
       alert('승인되었습니다!')
       fetchAllItems()
     } catch (error) {
+      console.error('승인 실패:', error)
       alert('승인 실패: ' + error.message)
     }
   }
@@ -91,16 +86,22 @@ function Admin() {
     if (!window.confirm(`"${itemName}"을(를) 정말 삭제하시겠습니까?`)) return
 
     try {
+      console.log('🗑️ 삭제 시작:', id)
+      
       const { error } = await supabase
         .from('items')
         .delete()
         .eq('id', id)
 
-      if (error) throw error
+      if (error) {
+        console.error('삭제 에러:', error)
+        throw error
+      }
       
       alert('삭제되었습니다.')
       fetchAllItems()
     } catch (error) {
+      console.error('삭제 실패:', error)
       alert('삭제 실패: ' + error.message)
     }
   }
@@ -131,7 +132,14 @@ function Admin() {
     <div className="admin-page">
       <div className="admin-header">
         <h2>관리자 페이지</h2>
-        <button onClick={() => setIsLoggedIn(false)} className="logout-btn">로그아웃</button>
+        <div style={{display: 'flex', gap: '10px'}}>
+          <button onClick={fetchAllItems} className="refresh-btn">
+            🔄 새로고침
+          </button>
+          <button onClick={() => setIsLoggedIn(false)} className="logout-btn">
+            로그아웃
+          </button>
+        </div>
       </div>
 
       {/* 탭 전환 */}
@@ -172,6 +180,7 @@ function Admin() {
                 <p><strong>날짜:</strong> {new Date(item.date).toLocaleDateString()}</p>
                 {item.description && <p><strong>설명:</strong> {item.description}</p>}
                 <p><strong>연락처:</strong> {item.contact}</p>
+                <p style={{fontSize: '12px', color: '#999'}}>ID: {item.id}</p>
               </div>
               <div className="admin-actions">
                 {activeView === 'pending' && (
