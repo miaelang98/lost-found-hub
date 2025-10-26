@@ -5,21 +5,40 @@ import './Admin.css'
 function Admin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [password, setPassword] = useState('')
+  const [loginAttempts, setLoginAttempts] = useState(0)
+  const [isBlocked, setIsBlocked] = useState(false)
   const [pendingItems, setPendingItems] = useState([])
   const [approvedItems, setApprovedItems] = useState([])
   const [activeView, setActiveView] = useState('pending') // 'pending' or 'approved'
   const [loading, setLoading] = useState(false)
 
-  const ADMIN_PASSWORD = 'admin1234' // 원하는 비밀번호로 변경하세요!
-
+  const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD || 'admin123' // 기본값 설정
+  const MAX_ATTEMPTS = 3
+  
   const handleLogin = (e) => {
     e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
-      setIsLoggedIn(true)
-      fetchAllItems()
-    } else {
-      alert('비밀번호가 틀렸습니다.')
-    }
+    if (isBlocked) {
+        alert('너무 많은 시도로 인해 차단되었습니다. 10분 후 다시 시도하세요.')
+        return
+      }
+      if (password === ADMIN_PASSWORD) {
+        setIsLoggedIn(true)
+        setLoginAttempts(0)
+      } else {
+        const newAttempts = loginAttempts + 1
+        setLoginAttempts(newAttempts)
+        
+        if (newAttempts >= MAX_ATTEMPTS) {
+          setIsBlocked(true)
+          setTimeout(() => {
+            setIsBlocked(false)
+            setLoginAttempts(0)
+          }, 10 * 60 * 1000) // 10분
+          alert('3회 실패로 10분간 차단되었습니다.')
+        } else {
+          alert(`비밀번호가 틀렸습니다. (${newAttempts}/${MAX_ATTEMPTS})`)
+        }
+      }
   }
 
   const fetchAllItems = async () => {
